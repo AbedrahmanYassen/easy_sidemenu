@@ -17,6 +17,10 @@ class SideMenuItem extends StatefulWidget {
     this.badgeContent,
     this.badgeColor,
     this.tooltipContent,
+    this.iconSize,
+    this.height,
+    this.titleFontSize,
+    this.itemBoxDecoration,
   })  : assert(title != null || icon != null,
             'Title and icon should not be empty at the same time'),
         super(key: key);
@@ -47,7 +51,14 @@ class SideMenuItem extends StatefulWidget {
   /// Content of the tooltip - if not filled, the [title] will
   /// be used. [showTooltipOverItemsName] must be set to true.
   final String? tooltipContent;
-
+  ///the size of the icon (default = 24)
+  final double? iconSize ;
+  /// the height of the item
+  final double? height;
+  /// the font size of the item
+  final double? titleFontSize ;
+  /// custom box decoration
+  final BoxDecoration? itemBoxDecoration;
   @override
   _SideMenuItemState createState() => _SideMenuItemState();
 }
@@ -112,7 +123,7 @@ class _SideMenuItemState extends State<SideMenuItem> {
       color: widget.priority == currentPage.ceil()
           ? Global.style.selectedIconColor ?? Colors.black
           : Global.style.unselectedIconColor ?? Colors.black54,
-      size: Global.style.iconSize ?? 24,
+      size: ((widget.iconSize == null)?24:widget.iconSize),
     );
     if (widget.badgeContent == null) {
       return icon;
@@ -133,9 +144,9 @@ class _SideMenuItemState extends State<SideMenuItem> {
       child: Padding(
         padding: Global.style.itemOuterPadding,
         child: Container(
-          height: Global.style.itemHeight,
+          height: (widget.height == null)?Global.style.itemHeight:widget.height,
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration:(widget.itemBoxDecoration != null)? widget.itemBoxDecoration:BoxDecoration(
             color: _setColor(),
             borderRadius: Global.style.itemBorderRadius,
           ),
@@ -165,11 +176,11 @@ class _SideMenuItemState extends State<SideMenuItem> {
                           child: Text(
                             widget.title ?? '',
                             style: widget.priority == currentPage.ceil()
-                                ? const TextStyle(
-                                        fontSize: 17, color: Colors.black)
+                                ?  TextStyle(
+                                        fontSize: widget.titleFontSize, color: Colors.black)
                                     .merge(Global.style.selectedTitleTextStyle)
-                                : const TextStyle(
-                                        fontSize: 17, color: Colors.black54)
+                                :  TextStyle(
+                                        fontSize: widget.titleFontSize, color: Colors.black54)
                                     .merge(
                                         Global.style.unselectedTitleTextStyle),
                           ),
